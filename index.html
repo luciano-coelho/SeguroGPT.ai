@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SeguroGPT.ai — Inteligência regulatória para o mercado de seguros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --navy-light: #1e3a5f;
+    --blue: #1a6eb5;
+    --blue-bright: #2d8de8;
+    --blue-glow: rgba(45,141,232,0.15);
+    --gold: #c9a84c;
+    --gold-light: #e8c97e;
+    --cream: #f5f0e8;
+    --cream-dim: #e8e0d0;
+    --white: #ffffff;
+    --text-muted: #8899aa;
+    --border: rgba(255,255,255,0.08);
+    --border-gold: rgba(201,168,76,0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 3rem;
+    background: rgba(10,22,40,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-logomark {
+    width: 32px;
+    height: 32px;
+    background: var(--blue);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-logomark svg { width: 18px; height: 18px; }
+  .nav-wordmark {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+  .nav-wordmark span { color: var(--gold); }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cream); }
+  .nav-cta {
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--blue-bright); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(45,141,232,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(45,141,232,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  .hero-glow {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(45,141,232,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gold);
+    background: rgba(201,168,76,0.08);
+    border: 0.5px solid var(--border-gold);
+    border-radius: 20px;
+    padding: 6px 16px;
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .hero-badge-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    position: relative;
+    max-width: 800px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero p {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--text-muted);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    margin-bottom: 5rem;
+  }
+  .btn-gold {
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 500;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-ghost {
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 400;
+    background: transparent;
+    color: var(--cream);
+    border: 0.5px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.4); }
+
+  /* STATS */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+    position: relative;
+    background: rgba(255,255,255,0.02);
+  }
+  .stat-item {
+    flex: 1;
+    max-width: 220px;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    border-right: 0.5px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--blue-bright);
+    display: block;
+  }
+  .stat-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-weight: 300;
+  }
+
+  /* SECTION COMMON */
+  section {
+    padding: 5rem 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .section-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+  .section-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .section-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 500px;
+    margin-bottom: 3rem;
+  }
+
+  /* FEATURES */
+  .feat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .feat-card {
+    background: var(--navy);
+    padding: 2rem;
+    transition: background 0.2s;
+  }
+  .feat-card:hover { background: var(--navy-mid); }
+  .feat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--blue-glow);
+    border: 0.5px solid rgba(45,141,232,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .feat-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--blue-bright);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .feat-card h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+  .feat-card p {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .feat-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(201,168,76,0.08);
+    border: 0.5px solid var(--border-gold);
+    border-radius: 4px;
+    padding: 3px 8px;
+    margin-top: 12px;
+  }
+
+  /* ARCHITECTURE */
+  .arch-section {
+    background: var(--navy-mid);
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+    padding: 5rem 0;
+  }
+  .arch-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 3rem;
+  }
+  .arch-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 2rem;
+  }
+  .arch-step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2rem;
+    padding: 1.75rem 0;
+    border-bottom: 0.5px solid var(--border);
+    align-items: start;
+  }
+  .arch-step:last-child { border-bottom: none; }
+  .arch-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    color: rgba(45,141,232,0.15);
+    line-height: 1;
+    text-align: right;
+  }
+  .arch-content h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .arch-content p {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .arch-pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blue-bright);
+    background: var(--blue-glow);
+    border: 0.5px solid rgba(45,141,232,0.3);
+    border-radius: 4px;
+    padding: 3px 8px;
+    margin-top: 8px;
+  }
+
+  /* DEMO */
+  .demo-section {
+    padding: 5rem 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .chat-shell {
+    background: var(--navy-mid);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+  .chat-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border-bottom: 0.5px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+  .titlebar-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .tdot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .tdot.r { background: #ff5f57; }
+  .tdot.y { background: #febc2e; }
+  .tdot.g { background: #28c840; }
+  .chat-titlebar-center {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .online-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #28c840;
+    animation: pulse 2s infinite;
+  }
+  .chat-pills {
+    display: flex;
+    gap: 6px;
+    padding: 12px 20px;
+    border-bottom: 0.5px solid var(--border);
+    flex-wrap: wrap;
+    background: rgba(255,255,255,0.01);
+  }
+  .cpill {
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 0.5px solid rgba(255,255,255,0.12);
+    color: var(--text-muted);
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .cpill:hover {
+    border-color: var(--blue-bright);
+    color: var(--cream);
+    background: var(--blue-glow);
+  }
+  .chat-msgs {
+    height: 400px;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .cmsg { display: flex; gap: 10px; align-items: flex-start; }
+  .cmsg.u { flex-direction: row-reverse; }
+  .cav {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .cav.ai {
+    background: var(--blue-glow);
+    border: 0.5px solid rgba(45,141,232,0.3);
+    color: var(--blue-bright);
+  }
+  .cav.u {
+    background: rgba(201,168,76,0.1);
+    border: 0.5px solid var(--border-gold);
+    color: var(--gold);
+  }
+  .cbubble {
+    max-width: 78%;
+    font-size: 13px;
+    line-height: 1.7;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 300;
+  }
+  .cbubble.ai {
+    background: rgba(255,255,255,0.04);
+    border: 0.5px solid var(--border);
+    color: var(--cream);
+    border-bottom-left-radius: 2px;
+  }
+  .cbubble.u {
+    background: rgba(201,168,76,0.08);
+    border: 0.5px solid var(--border-gold);
+    color: var(--cream-dim);
+    border-bottom-right-radius: 2px;
+  }
+  .typing-dots { display: flex; gap: 4px; align-items: center; padding: 2px 0; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-muted); animation: bop 1.2s infinite; }
+  .dot:nth-child(2) { animation-delay: .2s; }
+  .dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes bop { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+  .chat-inputbar {
+    display: flex;
+    gap: 10px;
+    padding: 14px 20px;
+    border-top: 0.5px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+  .chat-inputbar input {
+    flex: 1;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    padding: 10px 14px;
+    border: 0.5px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    color: var(--cream);
+  }
+  .chat-inputbar input::placeholder { color: var(--text-muted); }
+  .chat-inputbar input:focus {
+    outline: none;
+    border-color: var(--blue-bright);
+    background: rgba(45,141,232,0.05);
+  }
+  .chat-inputbar button {
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .chat-inputbar button:hover { background: var(--blue-bright); }
+  .chat-inputbar button:disabled { opacity: 0.4; cursor: default; }
+  .chat-disclaimer {
+    font-size: 11px;
+    color: rgba(136,153,170,0.6);
+    text-align: center;
+    padding: 10px;
+    border-top: 0.5px solid var(--border);
+  }
+
+  /* CTA */
+  .cta-section {
+    padding: 5rem 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .cta-box {
+    background: linear-gradient(135deg, var(--navy-mid) 0%, rgba(26,110,181,0.15) 100%);
+    border: 0.5px solid rgba(45,141,232,0.25);
+    border-radius: 16px;
+    padding: 3.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-box::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(45,141,232,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-box h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .cta-box p {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 0.5px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.01);
+  }
+  .footer-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--text-muted);
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-note {
+    font-size: 11px;
+    color: rgba(136,153,170,0.5);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logomark">
+      <svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+        <circle cx="9" cy="9" r="7"/>
+        <path d="M3 9h12M9 3v12"/>
+      </svg>
+    </div>
+    <span class="nav-wordmark">Seguro<span>GPT</span>.ai</span>
+  </div>
+  <!-- nav-links removido -->
+  <!-- nav-cta removido -->
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-badge">
+    <div class="hero-badge-pulse"></div>
+    IA Generativa · Mercado Segurador Brasileiro
+  </div>
+  <h1>Inteligência regulatória<br>para um mercado em <em>transformação</em></h1>
+  <p>O SeguroGPT.ai converte circulares da SUSEP, resoluções do CNSP e normas conexas em respostas precisas, acessíveis por linguagem natural.</p>
+  <div class="hero-actions">
+    <button class="btn-gold" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Experimentar agora</button>
+    <button class="btn-ghost" onclick="document.getElementById('funcionalidades').scrollIntoView({behavior:'smooth'})">Ver funcionalidades</button>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-number">+800</span>
+    <div class="stat-desc">normas e circulares indexadas</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">4</span>
+    <div class="stat-desc">módulos integrados</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">RAG</span>
+    <div class="stat-desc">recuperação semântica</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">LLM</span>
+    <div class="stat-desc">geração aumentada por contexto</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="funcionalidades">
+  <div class="section-eyebrow">capacidades</div>
+  <h2 class="section-heading">Quatro funções.<br>Uma plataforma.</h2>
+  <p class="section-sub">Um único ambiente que reúne consulta regulatória, análise de produtos, apoio à operação e capacitação do corretor.</p>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 18 18"><path d="M2 5h14M2 9h9M2 13h11"/></svg>
+      </div>
+      <h3>Consulta regulatória</h3>
+      <p>Acesso semântico a circulares SUSEP, resoluções CNSP e normas complementares, com citação exata da fonte e número da norma.</p>
+      <span class="feat-tag">SUSEP · CNSP</span>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 18 18"><circle cx="9" cy="9" r="7"/><path d="M9 6v4M9 13v.5"/></svg>
+      </div>
+      <h3>Análise de produtos</h3>
+      <p>Interpretação de condições gerais, coberturas, exclusões e comparação entre produtos do mercado segurador.</p>
+      <span class="feat-tag">Coberturas · Exclusões</span>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 18 18"><rect x="2" y="2" width="14" height="14" rx="2"/><path d="M6 2v14M2 7h16"/></svg>
+      </div>
+      <h3>Apoio ao corretor</h3>
+      <p>Suporte operacional em tempo real: comissões, prazos, obrigações regulatórias e fluxos de sinistro.</p>
+      <span class="feat-tag">Operação · Sinistro</span>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 18 18"><path d="M4 14V9M9 14V4M14 14V7"/></svg>
+      </div>
+      <h3>Capacitação contínua</h3>
+      <p>Trilhas de conhecimento adaptativas sobre open insurance, LGPD aplicada e regulação financeira conexa.</p>
+      <span class="feat-tag">Open Insurance · LGPD</span>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<div class="arch-section" id="arquitetura">
+  <div class="arch-inner">
+    <div class="section-eyebrow">arquitetura técnica</div>
+    <h2 class="section-heading">Como o sistema funciona</h2>
+    <p class="section-sub">Pipeline de IA generativa com recuperação aumentada por contexto regulatório.</p>
+    <div class="arch-flow">
+      <div class="arch-step">
+        <div class="arch-num">01</div>
+        <div class="arch-content">
+          <h4>Ingestão e atualização da base normativa</h4>
+          <p>Pipeline automatizado coleta, processa e indexa circulares, resoluções e normas da SUSEP e CNSP com atualização contínua da base vetorial.</p>
+          <span class="arch-pill">ETL · Vector Store</span>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-num">02</div>
+        <div class="arch-content">
+          <h4>Recuperação semântica (RAG)</h4>
+          <p>A consulta do usuário é vetorizada e confrontada com os documentos mais relevantes da base, ranqueados por similaridade semântica.</p>
+          <span class="arch-pill">Embeddings · Similarity Search</span>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-num">03</div>
+        <div class="arch-content">
+          <h4>Geração aumentada por contexto</h4>
+          <p>O modelo de linguagem gera a resposta ancorada nos documentos recuperados, com rastreabilidade da fonte normativa correspondente.</p>
+          <span class="arch-pill">LLM · Grounded Generation</span>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-num">04</div>
+        <div class="arch-content">
+          <h4>Entrega por linguagem natural</h4>
+          <p>A resposta chega ao profissional de seguros em linguagem clara e acessível, com referência à norma citada para auditabilidade.</p>
+          <span class="arch-pill">NLG · Citação da Fonte</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEMO -->
+<div class="demo-section" id="demo">
+  <div class="section-eyebrow">demonstração ao vivo</div>
+  <h2 class="section-heading">Experimente agora</h2>
+  <p class="section-sub">Faça uma pergunta sobre regulação, produtos ou open insurance e veja o agente em ação.</p>
+
+  <div class="chat-shell">
+    <div class="chat-titlebar">
+      <div class="titlebar-dots">
+        <div class="tdot r"></div>
+        <div class="tdot y"></div>
+        <div class="tdot g"></div>
+      </div>
+      <div class="chat-titlebar-center">
+        <div class="online-dot"></div>
+        SeguroGPT.ai — Agente Regulatório
+      </div>
+    </div>
+    <div class="chat-pills">
+      <button class="cpill" onclick="sq('Quais são as minhas obrigações legais como corretor de seguros em caso de sinistro do meu cliente?')">Obrigações no sinistro</button>
+      <button class="cpill" onclick="sq('Meu cliente quer contratar um seguro de vida, mas tem uma doença preexistente. Como isso afeta a cobertura e o que preciso informar na proposta?')">Doença preexistente no seguro de vida</button>
+      <button class="cpill" onclick="sq('Qual é o prazo que a seguradora tem para responder uma proposta de seguro após meu envio? Existe alguma norma da SUSEP que regula isso?')">Prazo de resposta da seguradora</button>
+      <button class="cpill" onclick="sq('O que muda na minha atuação como corretor com o open insurance? Vou ter acesso a dados dos clientes de outras seguradoras?')">Corretor no open insurance</button>
+    </div>
+    <div class="chat-msgs" id="cmsgs">
+      <div class="cmsg">
+        <div class="cav ai">SG</div>
+        <div class="cbubble ai">Olá! Sou o <strong>SeguroGPT</strong>, assistente especializado no mercado segurador brasileiro.<br><br>Posso responder perguntas sobre regulação da SUSEP e CNSP, produtos, coberturas, open insurance e operação de corretores. Use as sugestões acima ou escreva sua pergunta.</div>
+      </div>
+    </div>
+    <div class="chat-inputbar">
+      <input type="text" id="cinp" placeholder="Pergunte sobre seguros, regulação ou coberturas..." onkeydown="if(event.key==='Enter'&&!this.disabled)go()"/>
+      <button id="cbtn" onclick="go()">Enviar</button>
+    </div>
+    <div class="chat-disclaimer">Motor: Claude (Anthropic) · Base regulatória: SUSEP / CNSP · Protótipo demonstrativo</div>
+  </div>
+</div>
+
+<!-- CTA removido -->
+
+<footer>
+  <div class="footer-logo">Seguro<span>GPT</span>.ai</div>
+  <div class="footer-note">Motor: Claude (Anthropic) · IA Generativa aplicada ao mercado segurador brasileiro</div>
+</footer>
+
+<script>
+const msgsEl = document.getElementById('cmsgs');
+const inpEl  = document.getElementById('cinp');
+const btnEl  = document.getElementById('cbtn');
+const history = [];
+
+const SYS = `Você é o SeguroGPT, assistente especializado no mercado segurador brasileiro.
+Escopo: regulação SUSEP e CNSP, circulares, resoluções, produtos de seguro, coberturas, LGPD aplicada a seguros, defesa do consumidor no setor, open insurance e operação de corretores.
+Responda de forma objetiva e estruturada. Ao citar normas, indique o número (ex: Circular SUSEP 667/2022).
+Se fora do mercado de seguros, redirecione educadamente ao escopo. Responda sempre em português brasileiro.`;
+
+function addMsg(role, html) {
+  const w = document.createElement('div');
+  w.className = 'cmsg' + (role === 'user' ? ' u' : '');
+  const av = document.createElement('div');
+  av.className = 'cav ' + (role === 'user' ? 'u' : 'ai');
+  av.textContent = role === 'user' ? 'EU' : 'SG';
+  const b = document.createElement('div');
+  b.className = 'cbubble ' + (role === 'user' ? 'u' : 'ai');
+  b.innerHTML = html;
+  w.appendChild(av); w.appendChild(b);
+  msgsEl.appendChild(w);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+}
+
+function showTyping() {
+  const w = document.createElement('div');
+  w.className = 'cmsg'; w.id = 'trow';
+  w.innerHTML = '<div class="cav ai">SG</div><div class="cbubble ai"><div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';
+  msgsEl.appendChild(w); msgsEl.scrollTop = msgsEl.scrollHeight;
+}
+
+function hideTyping() { const t = document.getElementById('trow'); if (t) t.remove(); }
+function lock(v) { inpEl.disabled = v; btnEl.disabled = v; }
+function fmt(t) {
+  return t.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+}
+
+
+async function ask(q) {
+  addMsg('user', q);
+  showTyping(); lock(true);
+  try {
+    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=AIzaSyDkEjLiBBBqx6PW1oN-O4_PqMyePfKy5lo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [
+          { parts: [ { text: q } ] }
+        ]
+      })
+    });
+    if (!r.ok) {
+      const e = await r.json().catch(() => ({}));
+      throw new Error(e.error?.message || 'Erro ' + r.status);
+    }
+    const d = await r.json();
+    // Gemini response parsing
+    let txt = '';
+    if (d.candidates && d.candidates.length > 0 && d.candidates[0].content && d.candidates[0].content.parts) {
+      txt = d.candidates[0].content.parts.map(p => p.text).join('');
+    } else {
+      txt = 'Nenhuma resposta gerada.';
+    }
+    hideTyping(); addMsg('ai', fmt(txt));
+  } catch(e) {
+    hideTyping(); addMsg('ai', 'Não foi possível obter resposta: <em>' + e.message + '</em>');
+  }
+  lock(false); inpEl.focus();
+}
+
+function go() { const q = inpEl.value.trim(); if (!q) return; inpEl.value = ''; ask(q); }
+function sq(q) { inpEl.value = q; go(); }
+</script>
+</body>
+</html>
